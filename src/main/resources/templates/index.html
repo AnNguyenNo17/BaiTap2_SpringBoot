@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Chủ</title>
+</head>
+<body>
+    <h1>10 SẢN PHẨM MỚI NHẤT</h1>
+
+    <!-- Nếu danh sách trống -->
+    <div th:if="${#lists.isEmpty(topProducts)}">
+        <p style="color: red;">Hiện chưa có sản phẩm nào trong CSDL.</p>
+    </div>
+
+    <!-- Danh sách sản phẩm -->
+    <div style="display: flex; flex-wrap: wrap; gap: 15px;" th:if="${not #lists.isEmpty(topProducts)}">
+        <div th:each="p : ${topProducts}" style="border: 1px solid #ccc; padding: 10px; width: 200px;">
+            <h3 th:text="${p.name}">Tên sản phẩm</h3>
+            <p>Giá: <span th:text="${p.price}">0</span> VNĐ</p>
+            <a th:href="@{/product/{id}(id=${p.id})}">Xem chi tiết</a>
+        </div>
+    </div>
+
+    <br><hr><br>
+    <a href="/product">Xem tất cả sản phẩm (Phân trang 6 sp/trang)</a> | 
+    <a href="/login">Đăng nhập</a> | 
+    <a href="/register">Đăng ký</a>
+</body>
+</html>

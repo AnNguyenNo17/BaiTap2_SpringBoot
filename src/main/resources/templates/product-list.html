@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh Sách Sản Phẩm</title>
+</head>
+<body>
+    <h1>DANH SÁCH SẢN PHẨM (6 SP / TRANG)</h1>
+
+    <!-- Nếu không có sản phẩm -->
+    <div th:if="${productPage == null or productPage.totalElements == 0}">
+        <p style="color: red;">Hiện chưa có sản phẩm nào.</p>
+    </div>
+
+    <!-- Danh sách sản phẩm -->
+    <div style="display: flex; flex-wrap: wrap; gap: 15px;" th:if="${productPage != null and productPage.totalElements > 0}">
+        <div th:each="p : ${productPage.content}" style="border: 1px solid #ccc; padding: 10px; width: 200px;">
+            <h3 th:text="${p.name}">Tên sản phẩm</h3>
+            <p>Giá: <span th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')}">0</span> VNĐ</p>
+            <a th:href="@{/product/{id}(id=${p.id})}">Xem chi tiết</a>
+        </div>
+    </div>
+
+    <!-- Thanh phân trang -->
+    <div style="margin-top: 20px;" th:if="${totalPages > 0}">
+        <span>Trang: </span>
+        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/product(page=${i})}" 
+               th:text="${i + 1}" 
+               th:style="${i == currentPage} ? 'font-weight: bold; margin-right: 10px; color: red;' : 'margin-right: 10px;'"></a>
+        </span>
+    </div>
+
+    <br><hr><br>
+    <a href="/">Quay về trang chủ</a>
+</body>
+</html>
