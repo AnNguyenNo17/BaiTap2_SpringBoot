@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ sơ cá nhân</title>
+</head>
+<body>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-3">Hồ sơ cá nhân</h2>
+
+                    <div class="alert alert-success" th:if="${message}" th:text="${message}"></div>
+                    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+                    <div class="text-center mb-3">
+                        <img th:if="${avatarPath != null and !avatarPath.isEmpty()}"
+                             th:src="@{'/' + ${avatarPath}}"
+                             class="rounded-circle border"
+                             style="width:120px;height:120px;object-fit:cover;" />
+                        <img th:unless="${avatarPath != null and !avatarPath.isEmpty()}"
+                             src="https://via.placeholder.com/120?text=Avatar"
+                             class="rounded-circle border"
+                             style="width:120px;height:120px;object-fit:cover;" />
+                    </div>
+
+                    <p class="text-muted text-center">Email: <span th:text="${email}"></span></p>
+
+                    <form th:action="@{/profile}" th:object="${profileForm}" method="post" enctype="multipart/form-data" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Họ và tên</label>
+                            <input type="text" th:field="*{fullname}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('fullname')} ? 'is-invalid' : ''" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" th:field="*{phone}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh đại diện</label>
+                            <input type="file" name="avatarFile" class="form-control" accept="image/*" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Lưu thay đổi</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

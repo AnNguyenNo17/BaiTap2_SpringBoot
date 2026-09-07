@@ -5,21 +5,43 @@
     <title>Đăng nhập</title>
 </head>
 <body>
-    <h2>ĐĂNG NHẬP</h2>
-    <p style="color: green;" th:if="${param.success}">Kích hoạt hoặc đổi mật khẩu thành công! Vui lòng đăng nhập.</p>
-    <p style="color: red;" th:if="${error}" th:text="${error}"></p>
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-3">Đăng nhập</h2>
 
-    <form th:action="@{/login}" method="post">
-        <label>Email:</label><br>
-        <input type="email" name="email" required /><br><br>
-        
-        <label>Mật khẩu:</label><br>
-        <input type="password" name="password" required /><br><br>
-        
-        <button type="submit">Đăng nhập</button>
-    </form>
-    <br>
-    <a href="/register">Đăng ký tài khoản mới</a> | 
-    <a href="/forgot-password">Quên mật khẩu?</a>
+                    <div class="alert alert-success" th:if="${param.success}">
+                        Kích hoạt hoặc đổi mật khẩu thành công! Vui lòng đăng nhập.
+                    </div>
+                    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+                    <form th:action="@{/login}" th:object="${loginForm}" method="post" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" th:field="*{email}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu</label>
+                            <input type="password" th:field="*{password}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                    </form>
+
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <a href="/register">Đăng ký tài khoản mới</a>
+                        <a href="/forgot-password">Quên mật khẩu?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
