@@ -68,6 +68,7 @@ public class ProfileController {
     public String updateProfile(@Valid @ModelAttribute("profileForm") ProfileForm form,
                                  BindingResult result,
                                  @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+                                 @RequestParam(value = "removeAvatar", required = false) String removeAvatar,
                                  HttpSession session,
                                  Model model) {
 
@@ -85,8 +86,23 @@ public class ProfileController {
         user.setFullname(form.getFullname());
         user.setPhone(form.getPhone());
 
+        // Xoa anh dai dien theo yeu cau cua user (tick checkbox "Xoa anh dai dien")
+        if ("on".equals(removeAvatar) || "true".equals(removeAvatar)) {
+            deleteAvatarFileIfExists(user.getAvatarPath());
+            user.setAvatarPath(null);
+        }
+
         if (avatarFile != null && !avatarFile.isEmpty()) {
+            String contentType = avatarFile.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                model.addAttribute("error", "File không hợp lệ. Vui lòng chọn một file ảnh (jpg, png, gif...).");
+                model.addAttribute("avatarPath", user.getAvatarPath());
+                model.addAttribute("email", user.getEmail());
+                return "profile";
+            }
             try {
+                // Xoa anh cu (neu co) truoc khi luu anh moi, tranh rac file tren server
+                deleteAvatarFileIfExists(user.getAvatarPath());
                 String savedRelativePath = saveAvatarFile(avatarFile, user.getId());
                 user.setAvatarPath(savedRelativePath);
             } catch (IOException e) {
@@ -125,5 +141,18 @@ public class ProfileController {
         Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 
         return uploadDir + "/" + filename;
+    }
+
+    // Xoa file anh dai dien cu tren o dia (neu ton tai), tranh tich luy file rac
+    private void deleteAvatarFileIfExists(String relativePath) {
+        if (relativePath == null || relativePath.isBlank()) {
+            return;
+        }
+        try {
+            Path path = Paths.get(relativePath);
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            System.err.println("Không thể xóa file ảnh cũ: " + relativePath + " - " + e.getMessage());
+        }
     }
 }
