@@ -1,0 +1,24 @@
+body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #0d6efd;
+}
+
+.card-login {
+    border: none;
+    border-radius: 12px;
+}
+
+table.table thead {
+    background-color: #f1f3f5;
+}
+
+.avatar-preview {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #dee2e6;
+}

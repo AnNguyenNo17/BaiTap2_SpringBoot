@@ -1,0 +1,15 @@
+<sitemesh>
+    <!-- Trang login dung decorator rieng, khong co sidebar admin -->
+    <mapping path="/login" decorator="/WEB-INF/decorators/login.jsp"/>
+
+    <!-- Toan bo khu vuc quan tri dung decorator admin (navbar + sidebar Bootstrap) -->
+    <mapping path="/admin/*" decorator="/WEB-INF/decorators/admin.jsp"/>
+
+    <!-- Cac trang con lai (vd: /profile) dung decorator main mac dinh -->
+    <mapping path="/*" decorator="/WEB-INF/decorators/main.jsp"/>
+
+    <!-- Khong decorate tai nguyen tinh -->
+    <mapping path="/resources/*" exclude="true"/>
+    <mapping path="/uploads/*" exclude="true"/>
+    <mapping path="/h2-console/*" exclude="true"/>
+</sitemesh>
